@@ -6,7 +6,7 @@ COPY src ./src
 RUN mvn clean package -DskipTests
 
 # Bước 2: Chạy ứng dụng trên Tomcat 10 (hỗ trợ Jakarta EE)
-FROM tomcat:10.1-jdk17-temurin
+FROM tomcat:10.1-jdk21-temurin
 RUN rm -rf /usr/local/tomcat/webapps/*
 # Copy file .war vừa build vào thư mục ROOT của Tomcat
 COPY --from=build /app/target/*.war /usr/local/tomcat/webapps/ROOT.war
