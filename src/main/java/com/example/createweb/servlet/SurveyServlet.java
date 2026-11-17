@@ -1,19 +1,17 @@
 package com.example.createweb.servlet;
 
 import java.io.*;
+import java.util.Calendar;          // <-- THÊM DÒNG NÀY
+import java.util.GregorianCalendar; // <-- THÊM DÒNG NÀY
 
 import com.example.createweb.business.Survey;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
-
 import com.example.createweb.business.User;
-
 import java.time.LocalDate;
-
 import jakarta.servlet.annotation.WebServlet;
 
 @WebServlet("/emailList")
-
 public class SurveyServlet extends HttpServlet {
 
     @Override
@@ -21,17 +19,16 @@ public class SurveyServlet extends HttpServlet {
                           HttpServletResponse response)
             throws ServletException, IOException {
 
-        String url = "/index.html";
+        String url = "/index.jsp"; // <-- SỬA TỪ /index.html THÀNH /index.jsp
 
         // get current action
         String action = request.getParameter("action");
         if (action == null) {
-            action = "join"; // default action
+            action = "join";
         }
 
-        // perform action and set URL to appropriate page
         if (action.equals("join")) {
-            url = "/index.html"; // the "join" page
+            url = "/index.jsp"; // <-- SỬA TỪ /index.html THÀNH /index.jsp
         } else if (action.equals("add")) {
 
             String firstName = request.getParameter("firstName");
@@ -45,7 +42,6 @@ public class SurveyServlet extends HttpServlet {
             String hearSource = request.getParameter("whereHear");
             boolean receiveAnnouncements = request.getParameter("yes1") != null;
             boolean receiveSpecialOffers = request.getParameter("yes2") != null;
-
             String contactMethod = request.getParameter("contact");
 
             Survey survey = new Survey(user, hearSource, receiveAnnouncements, receiveSpecialOffers, contactMethod);
@@ -54,7 +50,12 @@ public class SurveyServlet extends HttpServlet {
             url = "/thanks.jsp";
         }
 
-        // forward request and response objects to specified URL
+        // --- THÊM ĐOẠN NÀY THEO BƯỚC 6 ---
+        GregorianCalendar currentDate = new GregorianCalendar();
+        int currentYear = currentDate.get(Calendar.YEAR);
+        request.setAttribute("currentYear", currentYear);
+        // ---------------------------------
+
         getServletContext()
                 .getRequestDispatcher(url)
                 .forward(request, response);
